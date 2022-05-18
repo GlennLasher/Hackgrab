@@ -1,4 +1,4 @@
-# Mailsort
+# Hackgrab
 
 Collection of scripts to manage low-impact bulk downloads from YouTube
 
