@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Logical flow:
+#
+# Find the oldest validated file
+# Go to the folder containing that validated file.
+# Push the download to the back of the line to avoid collisions
+# Check the sha256sums file, results into validated file, details to log.
+
+
+BASEDIR=/srv/hackgrab
+
+cd ${BASEDIR}/content
+
+TORUN=`ls -tr */validated | head -n1`
+FOLDER=`dirname "${TORUN}"`
+
+echo -n "Started validation on ${FOLDER} at "
+date +"%Y-%m-%d %H:%M:%S"
+
+cd "${BASEDIR}/content/${FOLDER}"
+
+touch url
+
+if sha256sum --check sha256sums
+then
+    echo "SUCCESS" > validated
+else
+    echo "FAILURE" > validated
+fi
+
+echo -n "Completed validation on ${FOLDER} at "
+date +"%Y-%m-%d %H:%M:%S"
+echo

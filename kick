@@ -1,0 +1,33 @@
+#!/bin/bash
+
+BASEDIR=/srv/hackgrab
+
+BINDIR="${BASEDIR}/bin"
+DATADIR="${BASEDIR}/content"
+LOG="${BASEDIR}/logs/log"
+
+MESSAGE=""
+
+if [ "${1}" ]
+then
+    cd "${1}" || cd "${DATADIR}/${1}" || MESSAGE="Unable to find ${1}."
+fi
+
+if [ "${MESSAGE}" = "" ]
+then
+    if [ -e url ]
+    then
+	touch --date=1970-01-01 url
+    else
+	MESSAGE="Unable to find url file."
+    fi
+fi
+
+if [ "${MESSAGE}" = "" ]
+then
+    "${BINDIR}/launch"
+    tail -f "${LOG}"
+else
+    echo "${MESSAGE}"
+fi
+

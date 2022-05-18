@@ -1,0 +1,12 @@
+#!/bin/bash
+
+BASEDIR=/srv/hackgrab
+
+cd ${BASEDIR}
+cat metadata/status
+echo
+df -h .
+echo
+cd ${BASEDIR}/content
+ls -1tr */url | sed -e "s/\/url//"
+

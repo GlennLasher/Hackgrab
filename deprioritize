@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cd /srv/hackgrab/content
+
+for i in */url
+do
+    FOLDER=`dirname "${i}"`
+    if [ -e "${FOLDER}/sha256sums" ]
+    then
+	:
+    else
+	touch "${i}"
+    fi
+done

@@ -1,0 +1,99 @@
+#!/bin/bash
+
+# Logical flow:
+#
+# If there is a PID file
+#  If the PID is valid
+#   Exit
+# (Over)Write a PID file.
+# If we were supplied a channel name:
+#  get its url file
+# Otherwise
+#  Find the oldest url file
+# Go to the folder containing that url file.
+# Download everything from the url specified in the url file.
+# Update the file's timestamp to the stream's timestamp if possible
+# Sort the files by date
+# Create an sha256sums.part file
+# Rename sha256sums.part to sha256sums
+# touch the url file
+# Remove the PID file
+# Exit
+
+BASEDIR=/srv/hackgrab
+
+cd ${BASEDIR}/content
+
+if [ -e ${BASEDIR}/metadata/PID ]
+then
+    OLDPID=`cat ${BASEDIR}/metadata/PID`
+    if ps -p ${OLDPID}
+    then
+	exit
+    fi
+fi
+
+echo $$ > ${BASEDIR}/metadata/PID
+
+if [ "${1}" ]
+then
+    TORUN="${1}/url"
+else
+    TORUN=`ls -tr */url | head -n1`
+fi
+
+FOLDER=`dirname "${TORUN}"`
+
+echo -n "Started ${FOLDER} at "
+date +"%Y-%m-%d %H:%M:%S"
+
+cd "${BASEDIR}/content/${FOLDER}"
+
+if [ -x dothis ]
+then
+    echo "Running pre-download script."
+    echo "Prescript   ${FOLDER}" > ${BASEDIR}/metadata/status
+    
+    if ./dothis
+    then
+	rm dothis
+    else
+	chmod -x dothis
+    fi
+fi
+
+URL="`cat url`"
+
+echo "Downloading ${FOLDER}" > ${BASEDIR}/metadata/status && \
+    /usr/local/bin/yt-dlp --ignore-errors --write-description --download-archive archive "${URL}"
+
+echo "Sorting    ${FOLDER}" > ${BASEDIR}/metadata/status
+
+for i in *.mp4
+do
+    #Extract the date
+    echo ${i}
+    DATE=`/usr/bin/mediainfo "${i}" | grep "Tagged date" | head -n1 | cut -f2 -d":"`
+
+    #If there is one, use it to set the file's timestamp.
+    if [ "${DATE}" ]
+    then
+	touch --date="${DATE}" "${i}"
+    fi
+done
+
+${BASEDIR}/bin/datesort.py
+
+echo "Hashing    ${FOLDER}" > ${BASEDIR}/metadata/status && \
+    #sha256sum */*/*/*.mp4 | tee sha256sums.part && \
+    #mv sha256sums.part sha256sums
+    ${BASEDIR}/bin/update_hash.py
+
+touch url
+
+cd ${BASEDIR} && rm ${BASEDIR}/metadata/PID && echo "Idle" > ${BASEDIR}/metadata/status
+
+echo -n "Completed ${FOLDER} at "
+date +"%Y-%m-%d %H:%M:%S"
+echo
+

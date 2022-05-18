@@ -1,0 +1,13 @@
+#!/bin/bash
+
+SERVER=Cana
+HOSTNAME=`hostname`
+THIS='/srv/hackgrab/bin/launch'
+
+if [ ${HOSTNAME} = ${SERVER} ]
+then
+    /srv/hackgrab/bin/grab_one >> /srv/hackgrab/logs/log 2>&1 &
+else
+    ssh ${SERVER} ${THIS}
+fi
+
