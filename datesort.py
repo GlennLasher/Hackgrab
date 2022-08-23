@@ -6,6 +6,8 @@ import re
 
 relevantre = re.compile ("^(.*)\.mp4$")
 
+new_content = []
+
 for filename in os.listdir():
     relevantmatch = relevantre.match(filename)
     if relevantmatch:
@@ -24,6 +26,7 @@ for filename in os.listdir():
         print ("    We will create", target)
         print ("    And move the file to", moveto)
 
+        new_content.append(moveto)
                            
         os.makedirs(target, exist_ok = True)
         os.rename(filename, moveto)
@@ -37,3 +40,6 @@ for filename in os.listdir():
             os.rename(desc, moveto)
             
         print ("")
+
+with open("new", "w") as outfile:
+    outfile.write("\n".join(new_content) + '\n')
