@@ -20,7 +20,7 @@ date +"%Y-%m-%d %H:%M:%S"
 
 cd "${BASEDIR}/content/${FOLDER}"
 
-touch url
+touch validated
 
 if sha256sum --check sha256sums
 then

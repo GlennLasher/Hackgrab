@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SERVER=Cana
+SERVER=Hackgrab
 HOSTNAME=`hostname`
 THIS='/srv/hackgrab/bin/launch'
 
