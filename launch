@@ -1,10 +1,16 @@
 #!/bin/bash
 
-SERVER=Hackgrab
-HOSTNAME=`hostname`
+SERVERLIST='Hackgrab-a Hackgrab-b Hackgrab-c Hackgrab-d'
 THIS='/srv/hackgrab/bin/launch'
 
-if [ ${HOSTNAME} = ${SERVER} ]
+HOSTNAME=`hostname`
+
+ARRAY=(${SERVERLIST})
+SIZE=${#ARRAY[@]}
+INDEX=$(($RANDOM % $SIZE))
+SERVER=${ARRAY[$INDEX]}
+
+if echo ${SERVERLIST} | grep -qw "${HOSTNAME}"
 then
     /srv/hackgrab/bin/grab_one >> /srv/hackgrab/logs/log 2>&1 &
 else

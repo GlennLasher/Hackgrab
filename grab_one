@@ -11,29 +11,30 @@
 # Otherwise
 #  Find the oldest url file
 # Go to the folder containing that url file.
+# touch the url file
 # Download everything from the url specified in the url file.
 # Update the file's timestamp to the stream's timestamp if possible
 # Sort the files by date
 # Create an sha256sums.part file
 # Rename sha256sums.part to sha256sums
-# touch the url file
 # Remove the PID file
 # Exit
 
 BASEDIR=/srv/hackgrab
+HOSTNAME=`hostname`
 
 cd ${BASEDIR}/content
 
-if [ -e ${BASEDIR}/metadata/PID ]
+if [ -e /dev/shm/Hackgrab_PID ]
 then
-    OLDPID=`cat ${BASEDIR}/metadata/PID`
+    OLDPID=`cat /dev/shm/Hackgrab_PID`
     if ps -p ${OLDPID}
     then
 	exit
     fi
 fi
 
-echo $$ > ${BASEDIR}/metadata/PID
+echo $$ > /dev/shm/Hackgrab_PID
 
 if [ "${1}" ]
 then
@@ -44,10 +45,12 @@ fi
 
 FOLDER=`dirname "${TORUN}"`
 
-echo -n "Started ${FOLDER} at "
+echo -n "${HOSTNAME} started ${FOLDER} at "
 date +"%Y-%m-%d %H:%M:%S"
 
 cd "${BASEDIR}/content/${FOLDER}"
+
+touch url
 
 if [ -x dothis ]
 then
@@ -89,11 +92,9 @@ echo "Hashing    ${FOLDER}" > ${BASEDIR}/metadata/status && \
     #mv sha256sums.part sha256sums
     ${BASEDIR}/bin/update_hash.py
 
-touch url
+cd ${BASEDIR} && rm /dev/shm/Hackgrab_PID && echo "Idle" > ${BASEDIR}/metadata/status
 
-cd ${BASEDIR} && rm ${BASEDIR}/metadata/PID && echo "Idle" > ${BASEDIR}/metadata/status
-
-echo -n "Completed ${FOLDER} at "
+echo -n "${HOSTNAME} completed ${FOLDER} at "
 date +"%Y-%m-%d %H:%M:%S"
 echo
 
