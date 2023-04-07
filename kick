@@ -26,7 +26,7 @@ fi
 if [ "${MESSAGE}" = "" ]
 then
     "${BINDIR}/launch"
-    tail -f "${LOG}"
+    #tail -f "${LOG}"
 else
     echo "${MESSAGE}"
 fi

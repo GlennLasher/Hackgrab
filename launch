@@ -7,13 +7,34 @@ HOSTNAME=`hostname`
 
 ARRAY=(${SERVERLIST})
 SIZE=${#ARRAY[@]}
-INDEX=$(($RANDOM % $SIZE))
-SERVER=${ARRAY[$INDEX]}
+
 
 if echo ${SERVERLIST} | grep -qw "${HOSTNAME}"
 then
-    /srv/hackgrab/bin/grab_one >> /srv/hackgrab/logs/log 2>&1 &
+    if [ -e /dev/shm/Hackgrab_PID ]
+    then
+	OLDPID=`cat /dev/shm/Hackgrab_PID`
+	if ps -p ${OLDPID}
+	then
+            exit 2
+	fi
+    else
+	/srv/hackgrab/bin/grab_one >> /srv/hackgrab/logs/log 2>&1 &
+    fi
 else
-    ssh ${SERVER} ${THIS}
+    RETRY=true
+    while ${RETRY}
+    do
+	  INDEX=$(($RANDOM % $SIZE))
+	  SERVER=${ARRAY[$INDEX]}
+	  echo "Launching on ${SERVER}"
+	  ssh ${SERVER} ${THIS}
+	  if [ $? != 2 ]
+	  then
+	      RETRY=false
+	  else
+	      echo "${SERVER} is busy.  Trying again."
+	  fi
+    done
 fi
 

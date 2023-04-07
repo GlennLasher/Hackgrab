@@ -9,13 +9,14 @@
 
 
 BASEDIR=/srv/hackgrab
+HOSTNAME=`hostname`
 
 cd ${BASEDIR}/content
 
 TORUN=`ls -tr */validated | head -n1`
 FOLDER=`dirname "${TORUN}"`
 
-echo -n "Started validation on ${FOLDER} at "
+echo -n "${HOSTNAME} started validation on ${FOLDER} at "
 date +"%Y-%m-%d %H:%M:%S"
 
 cd "${BASEDIR}/content/${FOLDER}"
@@ -29,6 +30,6 @@ else
     echo "FAILURE" > validated
 fi
 
-echo -n "Completed validation on ${FOLDER} at "
+echo -n "${HOSTNAME} completed validation on ${FOLDER} at "
 date +"%Y-%m-%d %H:%M:%S"
 echo

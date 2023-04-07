@@ -30,7 +30,7 @@ then
     OLDPID=`cat /dev/shm/Hackgrab_PID`
     if ps -p ${OLDPID}
     then
-	exit
+	exit 2
     fi
 fi
 
