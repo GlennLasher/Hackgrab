@@ -5,8 +5,13 @@ import time
 import re
 
 relevantre = re.compile ("^(.*)\.mp4$")
+new_filename = 'new'
 
 new_content = []
+
+if os.path.isfile(new_filename):
+    with open(new_filename, 'r') as infile:
+        new_content = infile.read().strip().split('\n')
 
 for filename in os.listdir():
     relevantmatch = relevantre.match(filename)
@@ -41,5 +46,5 @@ for filename in os.listdir():
             
         print ("")
 
-with open("new", "w") as outfile:
-    outfile.write("\n".join(new_content) + '\n')
+with open(new_filename, "w") as outfile:
+    outfile.write("\n".join(new_content[-10:]) + '\n')
