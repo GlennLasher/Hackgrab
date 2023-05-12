@@ -2,6 +2,8 @@
 
 SERVERLIST='Hackgrab-a Hackgrab-b Hackgrab-c Hackgrab-d'
 THIS='/srv/hackgrab/bin/launch'
+RETRIES=5
+INTERVAL=10
 
 HOSTNAME=`hostname`
 
@@ -33,7 +35,15 @@ else
 	  then
 	      RETRY=false
 	  else
-	      echo "${SERVER} is busy.  Trying again."
+	      RETRIES=$((${RETRIES} - 1))
+	      if [ ${RETRIES} = 0 ]
+	      then
+		  echo "Out of retries.  Exiting."
+		  RETRY=false
+	      else
+		  echo "${SERVER} is busy.  Trying again in ${INTERVAL} seconds."
+		  sleep ${INTERVAL}
+	      fi
 	  fi
     done
 fi
