@@ -4,7 +4,7 @@ import os
 import time
 import re
 
-relevantre = re.compile ("^(.*)\.mp4$")
+relevantre = re.compile ("^(.*)\.(mp4|webm)$")
 new_filename = 'new'
 
 new_content = []

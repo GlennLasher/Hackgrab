@@ -72,7 +72,9 @@ echo "Downloading ${FOLDER}" > ${BASEDIR}/metadata/status && \
 
 echo "Sorting    ${FOLDER}" > ${BASEDIR}/metadata/status
 
-for i in *.mp4
+shopt -s nullglob 
+
+for i in *.mp4 *.webm
 do
     #Extract the date
     echo ${i}
