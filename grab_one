@@ -52,10 +52,17 @@ cd "${BASEDIR}/content/${FOLDER}"
 
 touch url
 
+if [ -e .lock ]
+then
+    exit 3
+fi
+
+touch .lock
+
 if [ -x dothis ]
 then
     echo "Running pre-download script."
-    echo "Prescript   ${FOLDER}" > ${BASEDIR}/metadata/status
+    echo "Prescript   ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
     
     if ./dothis
     then
@@ -67,17 +74,17 @@ fi
 
 URL="`cat url`"
 
-echo "Downloading ${FOLDER}" > ${BASEDIR}/metadata/status && \
+echo "Downloading ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
     /usr/local/bin/yt-dlp --ignore-errors --write-description --download-archive archive "${URL}"
 
-echo "Sorting    ${FOLDER}" > ${BASEDIR}/metadata/status
+echo "Sorting    ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
 
 shopt -s nullglob 
 
 for i in *.mp4 *.webm
 do
     #Extract the date
-    echo ${i}
+    echo Timestamping ${i}
     DATE=`/usr/bin/mediainfo "${i}" | grep "Tagged date" | head -n1 | cut -f2 -d":"`
 
     #If there is one, use it to set the file's timestamp.
@@ -89,12 +96,16 @@ done
 
 ${BASEDIR}/bin/datesort.py
 
-echo "Hashing    ${FOLDER}" > ${BASEDIR}/metadata/status && \
+echo "Hashing    ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
     #sha256sum */*/*/*.mp4 | tee sha256sums.part && \
     #mv sha256sums.part sha256sums
     ${BASEDIR}/bin/update_hash.py
 
-cd ${BASEDIR} && rm /dev/shm/Hackgrab_PID && echo "Idle" > ${BASEDIR}/metadata/status
+rm -f .lock
+
+[ -e `date +"%Y/%m"` ] || [ -e --date="1 month ago" `date +"%Y/%m"` ]  || [ -e --date="2 months ago" `date +"%Y/%m"` ] || (mv -f url url_hold && echo "Deactivated ${FOLDER} due to inactivity.")
+
+cd ${BASEDIR} && rm /dev/shm/Hackgrab_PID && echo "Idle" > ${BASEDIR}/metadata/status_${HOSTNAME}
 
 echo -n "${HOSTNAME} completed ${FOLDER} at "
 date +"%Y-%m-%d %H:%M:%S"

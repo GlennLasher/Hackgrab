@@ -1,11 +1,14 @@
 #!/bin/bash
 
 SERVERLIST='Hackgrab-a Hackgrab-b Hackgrab-c Hackgrab-d'
-THIS='/srv/hackgrab/bin/launch'
+BASE='/srv/hackgrab'
+
+THIS="${BASE}/bin/launch"
 RETRIES=5
 INTERVAL=10
 
 HOSTNAME=`hostname`
+LOG="${BASE}/logs/${HOSTNAME}.log"
 
 ARRAY=(${SERVERLIST})
 SIZE=${#ARRAY[@]}
@@ -21,7 +24,7 @@ then
             exit 2
 	fi
     else
-	/srv/hackgrab/bin/grab_one >> /srv/hackgrab/logs/log 2>&1 &
+	/srv/hackgrab/bin/grab_one >> ${LOG} 2>&1 &
     fi
 else
     RETRY=true
