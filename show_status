@@ -3,7 +3,7 @@
 BASEDIR=/srv/hackgrab
 
 cd ${BASEDIR}
-cat metadata/status
+cat metadata/status_*
 echo
 df -h .
 echo

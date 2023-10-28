@@ -1,0 +1,11 @@
+#!/bin/bash
+
+BASEPATH=/srv/hackgrab
+
+cd ${BASEPATH}/content
+
+for i in */url_hold
+do
+    NEWNAME=`echo ${i} | sed -e "s/url_hold$/url/"`
+    mv "${i}" "${NEWNAME}"
+done
