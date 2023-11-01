@@ -8,6 +8,7 @@ relevantre = re.compile ("^(.*\])\.(mp4|webm|mkv)$")
 new_filename = 'new.m3u'
 
 new_content = []
+new_update  = False
 
 if os.path.isfile(new_filename):
     with open(new_filename, 'r') as infile:
@@ -32,6 +33,7 @@ for filename in os.listdir():
         print ("    And move the file to", moveto)
 
         new_content.append(moveto)
+        new_update = True
                            
         os.makedirs(target, exist_ok = True)
         os.rename(filename, moveto)
@@ -46,5 +48,6 @@ for filename in os.listdir():
             
         print ("")
 
-with open(new_filename, "w") as outfile:
-    outfile.write("\n".join(new_content[-10:]) + '\n')
+if new_update:
+    with open(new_filename, "w") as outfile:
+        outfile.write("\n".join(new_content[-10:]) + '\n')
