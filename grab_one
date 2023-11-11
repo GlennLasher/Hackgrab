@@ -77,7 +77,7 @@ URL="`cat url`"
 echo "Downloading ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
     /usr/local/bin/yt-dlp --ignore-errors --write-description --download-archive archive "${URL}"
 
-echo "Sorting    ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
+echo "Sorting     ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
 
 shopt -s nullglob 
 
@@ -96,7 +96,7 @@ done
 
 ${BASEDIR}/bin/datesort.py
 
-echo "Hashing    ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
+echo "Hashing     ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
     #sha256sum */*/*/*.mp4 | tee sha256sums.part && \
     #mv sha256sums.part sha256sums
     ${BASEDIR}/bin/update_hash.py

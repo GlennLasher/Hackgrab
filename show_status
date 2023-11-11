@@ -3,10 +3,32 @@
 BASEDIR=/srv/hackgrab
 
 cd ${BASEDIR}
-cat metadata/status_*
+echo "Node status:"
+for i in metadata/status_*
+do
+    node=`echo ${i} | sed -e "s/^metadata\/status_//"`
+    status=`cat ${i}`
+    printf "    %-12s: %s\n" ${node} "${status}"
+done
 echo
-df -h .
+
+echo "Filesystem status:"
+echo -n "    "
+df -h . | tail -n1
 echo
+
+
 cd ${BASEDIR}/content
-ls -1tr */url | sed -e "s/\/url//"
+
+echo "Channel counts:"
+printf "    %-12s: %s\n" "Active" `ls */url | wc -l`
+printf "    %-12s: %s\n" "Disabled" `ls */url_hold | wc -l`
+
+echo
+
+echo "Next ten downloads:"
+ls -1tr */url | head -n10 |  while read i
+do
+    printf "    %s\n" "`echo "${i}" | sed -e "s/\/url//"`"
+done
 

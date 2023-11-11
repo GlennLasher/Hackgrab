@@ -16,6 +16,7 @@ cd ${BASEDIR}/content
 TORUN=`ls -tr */validated | head -n1`
 FOLDER=`dirname "${TORUN}"`
 
+echo "Validating  ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
 echo -n "${HOSTNAME} started validation on ${FOLDER} at "
 date +"%Y-%m-%d %H:%M:%S"
 
@@ -33,3 +34,4 @@ fi
 echo -n "${HOSTNAME} completed validation on ${FOLDER} at "
 date +"%Y-%m-%d %H:%M:%S"
 echo
+echo "Idle" > ${BASEDIR}/metadata/status_${HOSTNAME}

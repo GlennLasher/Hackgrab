@@ -4,8 +4,8 @@ SERVERLIST='Hackgrab-a Hackgrab-b Hackgrab-c Hackgrab-d'
 BASE='/srv/hackgrab'
 
 THIS="${BASE}/bin/launch"
-RETRIES=5
-INTERVAL=10
+RETRIES=10
+INTERVAL=1
 
 HOSTNAME=`hostname`
 LOG="${BASE}/logs/${HOSTNAME}.log"
