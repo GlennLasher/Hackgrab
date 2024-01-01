@@ -103,7 +103,9 @@ echo "Hashing     ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
 
 rm -f .lock
 
-[ -e `date +"%Y/%m"` ] || [ -e `date +"%Y/%m" --date="2 months ago"` ]  || [ -e  `date +"%Y/%m" --date="1 months ago"` ] || (mv -f url url_hold && echo "Deactivated ${FOLDER} due to inactivity.")
+#[ -e `date +"%Y/%m"` ] || [ -e `date +"%Y/%m" --date="2 months ago"` ]  || [ -e  `date +"%Y/%m" --date="1 months ago"` ] || (mv -f url url_hold && echo "Deactivated ${FOLDER} due to inactivity.")
+
+[ -e `date +"%Y/%m"` ] || [ -e `date +"%Y/%m" --date="30 days ago"` ] || [ -e `date +"%Y/%m" --date="60 days ago"` ] || [ -e `date +"%Y/%m" --date="90 days ago"` ]  || (mv -f url url_hold && echo "Deactivated ${FOLDER} due to inactivity.")
 
 cd ${BASEDIR} && rm /dev/shm/Hackgrab_PID && echo "Idle" > ${BASEDIR}/metadata/status_${HOSTNAME}
 
