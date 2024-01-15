@@ -27,7 +27,7 @@ printf "    %-12s: %s\n" "Disabled" `ls */url_hold | wc -l`
 echo
 
 echo "Next ten downloads:"
-ls -1tr */url | head -n10 |  while read i
+ls -ltr */url | head -n10 | cut -d' ' -f 6- | while read i
 do
     printf "    %s\n" "`echo "${i}" | sed -e "s/\/url//"`"
 done
