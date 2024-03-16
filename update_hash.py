@@ -6,7 +6,7 @@ import hashlib
 
 hashfilename = "sha256sums"
 hashfilere   = re.compile('^([0-9a-f]{64})  (.*)$')
-filematchre  = re.compile('^.*\.(mp4|description)')
+filematchre  = re.compile('^.*\.(mp4|webm|mkv)')
 
 #Function to hash a file
 def hashfile(filepath):
