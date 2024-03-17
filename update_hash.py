@@ -48,7 +48,7 @@ for dir in os.walk("."):
             else:
                 action = "GEN"
                 outdict[filepath] = hashfile(filepath)
-            print ("%s %s  %s" % (action, outdict[filepath], filepath))
+            print ("%s %s  %s" % (action, outdict[filepath], filepath), flush=True)
 
 #Spit out the results
 with open(hashfilename, 'w') as outfile:
