@@ -22,6 +22,7 @@
 
 BASEDIR=/srv/hackgrab
 HOSTNAME=`hostname`
+AGEOUT='90'
 
 cd ${BASEDIR}/content
 
@@ -105,7 +106,20 @@ rm -f .lock
 
 #[ -e `date +"%Y/%m"` ] || [ -e `date +"%Y/%m" --date="2 months ago"` ]  || [ -e  `date +"%Y/%m" --date="1 months ago"` ] || (mv -f url url_hold && echo "Deactivated ${FOLDER} due to inactivity.")
 
-[ -e `date +"%Y/%m"` ] || [ -e `date +"%Y/%m" --date="30 days ago"` ] || [ -e `date +"%Y/%m" --date="60 days ago"` ] || [ -e `date +"%Y/%m" --date="90 days ago"` ]  || (mv -f url url_hold && echo "Deactivated ${FOLDER} due to inactivity.")
+#[ -e `date +"%Y/%m"` ] || [ -e `date +"%Y/%m" --date="30 days ago"` ] || [ -e `date +"%Y/%m" --date="60 days ago"` ] || [ -e `date +"%Y/%m" --date="90 days ago"` ]  || (mv -f url url_hold && echo "Deactivated ${FOLDER} due to inactivity.")
+
+INACTIVE="TRUE"
+
+TODAY=`date +"%Y/%m/%d"`
+i=`date +"%Y/%m/%d" --date="${AGEOUT} days ago"`
+
+while [ ${INACTIVE} = "TRUE" ] && [ ${i} != ${TODAY} ]
+do
+    [ -e ${i} ] && INACTIVE="FALSE" && echo "Content found within the last ${AGEOUT} days."
+    i=`date +"%Y/%m/%d" --date="tomorrow ${i}"`
+done
+
+[ ${INACTIVE} = "FALSE" ]  || (mv -f url url_hold && echo "Deactivated ${FOLDER} due to inactivity.")
 
 [ -e .lowpri ] && mv -f url url_hold && echo "Deactivated ${FOLDER} due to low priority."
 
