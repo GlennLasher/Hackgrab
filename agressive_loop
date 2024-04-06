@@ -1,0 +1,35 @@
+#!/usr/bin/bash
+
+BASEDIR=/srv/hackgrab
+
+cd ${BASEDIR}/content
+
+TORUN=`ls -tr */url | head -n1`
+FOLDER=`dirname "${TORUN}"`
+
+touch "${FOLDER}/.ag_stop_here"
+echo "Stop flag placed in ${FOLDER}/.ag_stop_here"
+
+while [ -e "${FOLDER}/.ag_stop_here" ]
+do
+    echo ${FOLDER}
+    echo "Stop flag found here."
+    ${BASEDIR}/bin/launch
+    TORUN=`ls -tr */url | head -n1`
+    FOLDER=`dirname "${TORUN}"`
+    sleep 10
+done
+
+while [ ! -e "${FOLDER}/.ag_stop_here" ]
+do
+    echo ${FOLDER}
+    echo "No stop flag found here."
+    ${BASEDIR}/bin/launch
+    TORUN=`ls -tr */url | head -n1`
+    FOLDER=`dirname "${TORUN}"`
+    sleep 10
+done
+
+echo "Stop flag found.  Stopping."
+
+rm "FOLDER/.ag_stop_here"
