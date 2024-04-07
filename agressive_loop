@@ -7,6 +7,8 @@ cd ${BASEDIR}/content
 TORUN=`ls -tr */url | head -n1`
 FOLDER=`dirname "${TORUN}"`
 
+rm */.ag_stop_here
+
 touch "${FOLDER}/.ag_stop_here"
 echo "Stop flag placed in ${FOLDER}/.ag_stop_here"
 
