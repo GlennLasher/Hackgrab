@@ -34,4 +34,4 @@ done
 
 echo "Stop flag found.  Stopping."
 
-rm "FOLDER/.ag_stop_here"
+rm "${FOLDER}/.ag_stop_here"
