@@ -1,37 +1,23 @@
 #!/usr/bin/bash
 
 BASEDIR=/srv/hackgrab
+INTERVAL=10
 
 cd ${BASEDIR}/content
 
-TORUN=`ls -tr */url | head -n1`
-FOLDER=`dirname "${TORUN}"`
-
-rm */.ag_stop_here
-
-touch "${FOLDER}/.ag_stop_here"
-echo "Stop flag placed in ${FOLDER}/.ag_stop_here"
-
-while [ -e "${FOLDER}/.ag_stop_here" ]
+#Start by flagging each active channel to be iterated over.
+for TORUN in */url
 do
-    echo ${FOLDER}
-    echo "Stop flag found here."
-    ${BASEDIR}/bin/launch
-    TORUN=`ls -tr */url | head -n1`
     FOLDER=`dirname "${TORUN}"`
-    sleep 10
+    touch "${FOLDER}/.ag_do"
 done
 
-while [ ! -e "${FOLDER}/.ag_stop_here" ]
+while [ `ls */.ag_do 2>/dev/null | wc -l` != 0 ]
 do
-    echo ${FOLDER}
-    echo "No stop flag found here."
-    ${BASEDIR}/bin/launch
     TORUN=`ls -tr */url | head -n1`
     FOLDER=`dirname "${TORUN}"`
-    sleep 10
+    echo "Calling launch on ${FOLDER}"
+    ${BASEDIR}/bin/launch "${FOLDER}"
+    sleep ${INTERVAL}
 done
 
-echo "Stop flag found.  Stopping."
-
-rm "${FOLDER}/.ag_stop_here"

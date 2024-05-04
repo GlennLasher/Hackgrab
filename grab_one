@@ -51,6 +51,11 @@ date +"%Y-%m-%d %H:%M:%S"
 
 cd "${BASEDIR}/content/${FOLDER}"
 
+if [ -e .ag_do ]
+then
+    rm .ag_do
+fi
+
 touch url
 
 if [ -e .lock ]
