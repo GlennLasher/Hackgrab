@@ -10,7 +10,7 @@ MESSAGE=""
 
 if [ "${1}" ]
 then
-    cd "${1}" || cd "${DATADIR}/${1}" || MESSAGE="Unable to find ${1}."
+    cd "${DATADIR}/${1}" || MESSAGE="Unable to find ${1}."
 fi
 
 if [ "${MESSAGE}" = "" ]
