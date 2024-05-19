@@ -22,7 +22,7 @@ cd ${BASEDIR}/content
 
 echo "Channel counts:"
 printf "    %-12s: %s\n" "Active" `ls */url | wc -l`
-printf "    %-12s: %s\n" "Disabled" `ls */url_hold | wc -l`
+printf "    %-12s: %s\n" "Disabled" `ls */url_hold 2>/dev/null | wc -l` 
 
 echo
 
