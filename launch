@@ -34,7 +34,8 @@ else
 	  SERVER=${ARRAY[$INDEX]}
 	  echo "Launching on ${SERVER}"
 	  ssh ${SERVER} ${THIS}
-	  if [ $? != 2 ]
+	  RESULT=$?
+	  if [ ${RESULT} != 2 ] && [ ${RESULT} != 255 ]
 	  then
 	      RETRY=false
 	  else
