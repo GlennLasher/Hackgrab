@@ -46,7 +46,7 @@ for filename in os.listdir():
 
             os.rename(desc, moveto)
             
-        print ("")
+        print ("", flush=True)
 
 if new_update:
     with open(new_filename, "w") as outfile:
