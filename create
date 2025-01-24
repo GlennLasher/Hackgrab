@@ -3,7 +3,7 @@
 from argparse import ArgumentParser
 from hackgrab import Channel
 
-def main:
+def main():
 
     parser=ArgumentParser()
     parser.add_argument("-v", "--verbose",  help="Verbose output", action="store_true")
@@ -11,7 +11,7 @@ def main:
     parser.add_argument("-b", "--basepath", help="Hackgrab system base path", default="/srv/hackgrab")
     parser.add_argument("-l", "--lowpri",   help="Channel has low priority", action="store_true")
     parser.add_argument("URL",             help="Channel URL")
-    parser.add_argument("Name",		   help="Channel name")
+    parser.add_argument("name",		   help="Channel name")
     args = parser.parse_args()
 
     channel = Channel(basepath = args.basepath, url = args.URL, name = args.name, lowpri = args.lowpri, verbose = args.verbose or args.debug, debug = args.debug)

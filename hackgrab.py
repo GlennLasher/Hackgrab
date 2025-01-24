@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import os
+
 class Loggable (object):
     def __init__(self, debug=False, verbose=False):
         self.debug    = debug
@@ -19,7 +21,7 @@ class Channel (Loggable):
         self.url         = url
         self.name        = name
         self.basepath    = basepath
-        self.lowprin     = lowpri
+        self.lowpri      = lowpri
         self.channelpath = os.path.join(self.basepath, "content", self.name)
 
     def create(self, overwrite = False, destroy = False):
@@ -30,9 +32,9 @@ class Channel (Loggable):
                 raise Exception ("Channel.create():  Channel %s already exists." % (self.name, ))
 
             
-        os.path.makedirs(self.channelpath)
+        os.makedirs(self.channelpath)
         with open (os.path.join(self.channelpath, "url"), "w") as outfile:
-            outfile.write(url + "\n")
+            outfile.write(self.url + "\n")
         with open (os.path.join(self.channelpath, "validated"), "w") as outfile:
             outfile.write("NEW\n")
         with open (os.path.join(self.channelpath, "archive"), "w") as outfile:
