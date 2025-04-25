@@ -71,11 +71,8 @@ then
     :
 else
     DELAY=$(($RANDOM % 60))
-    if [ ${DELAY} -le 10 ]
-    then
-	DELAY=0${DELAY}
-    fi
-    echo "Holding ${DELAY}  ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
+    UNTIL=`date --date="${DELAY} minutes" +"%H:%M"`
+    echo "Wait ${UNTIL}  ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
     sleep $(($DELAY * 60))
 fi
 
