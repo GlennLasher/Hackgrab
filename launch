@@ -24,7 +24,7 @@ then
             exit 2
 	fi
     else
-	/srv/hackgrab/bin/grab_one >> ${LOG} 2>&1 &
+	/srv/hackgrab/bin/grab_one "${1}" >> ${LOG} 2>&1 &
     fi
 else
     RETRY=true
@@ -33,7 +33,7 @@ else
 	  INDEX=$(($RANDOM % $SIZE))
 	  SERVER=${ARRAY[$INDEX]}
 	  echo "Launching on ${SERVER}"
-	  ssh ${SERVER} ${THIS}
+	  echo "${THIS} \"${1}\"" | ssh ${SERVER}
 	  RESULT=$?
 	  if [ ${RESULT} != 2 ] && [ ${RESULT} != 255 ]
 	  then

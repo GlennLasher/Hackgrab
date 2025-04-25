@@ -23,6 +23,7 @@
 BASEDIR=/srv/hackgrab
 HOSTNAME=`hostname`
 AGEOUT='90'
+MAX='20'
 
 cd ${BASEDIR}/content
 
@@ -65,6 +66,20 @@ fi
 
 touch .lock
 
+if [ "${1}" ]
+then
+    :
+else
+    DELAY=$(($RANDOM % 60))
+    if [ ${DELAY} -le 10 ]
+    then
+	DELAY=0${DELAY}
+    fi
+    echo "Holding ${DELAY}  ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
+    sleep $(($DELAY * 60))
+fi
+
+
 if [ -x dothis ]
 then
     echo "Running pre-download script."
@@ -80,8 +95,14 @@ fi
 
 URL="`cat url`"
 
+if [ -e .max ]
+then
+    MAX=`cat .max`
+fi
+
 echo "Downloading ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
-    /usr/local/bin/yt-dlp --ignore-errors --write-description --download-archive archive "${URL}"
+    #/usr/local/bin/yt-dlp --cookies $HOME/www.youtube.com_cookies.txt --ignore-errors --write-description --download-archive archive "${URL}"
+    /usr/local/bin/yt-dlp --ignore-errors --write-description --download-archive archive --max-downloads ${MAX} "${URL}"
 
 echo "Sorting     ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
 

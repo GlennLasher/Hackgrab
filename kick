@@ -4,29 +4,37 @@ BASEDIR=/srv/hackgrab
 
 BINDIR="${BASEDIR}/bin"
 DATADIR="${BASEDIR}/content"
-LOG="${BASEDIR}/logs/log"
 
 MESSAGE=""
 
+#First, determine what we're talking about
 if [ "${1}" ]
 then
-    cd "${DATADIR}/${1}" || MESSAGE="Unable to find ${1}."
+    TARGET="${1}"
+else
+    DIR=`pwd`
+    TARGET="`basename "${DIR}"`"
 fi
 
-if [ "${MESSAGE}" = "" ]
+echo "Target is ${TARGET}"
+
+#Make sure it exists
+cd "${DATADIR}/${1}" || MESSAGE="Unable to find ${1}."
+
+echo 1
+
+#If so, and it's disabled, re-enable it.
+if [ -e url_hold ]
 then
-    if [ -e url ]
-    then
-	touch --date=1970-01-01 url
-    else
-	MESSAGE="Unable to find url file."
-    fi
+    mv url_hold url
 fi
 
+echo 2
+
+#If there's no error messages so far, then plough forward
 if [ "${MESSAGE}" = "" ]
 then
-    "${BINDIR}/launch"
-    #tail -f "${LOG}"
+    ${BINDIR}/launch "${TARGET}"
 else
     echo "${MESSAGE}"
 fi

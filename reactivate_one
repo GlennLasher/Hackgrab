@@ -1,0 +1,15 @@
+#!/bin/bash
+
+BASEDIR=/srv/hackgrab
+
+cd ${BASEDIR}/content
+
+if [ "${1}" ]
+then
+    TORESET="${1}/url_hold"
+else
+    TORESET=`ls -tr */url_hold | head -n1`
+fi
+
+NEWNAME=`echo "${TORESET}" | sed -e "s/_hold$//"`
+mv "${TORESET}" "${NEWNAME}"
