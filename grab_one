@@ -73,6 +73,7 @@ else
     DELAY=$(($RANDOM % 60))
     UNTIL=`date --date="${DELAY} minutes" +"%H:%M"`
     echo "Wait ${UNTIL}  ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
+    echo "Countermeasure delay of ${DELAY} minutes, until approximately ${UNTIL}."
     sleep $(($DELAY * 60))
 fi
 
