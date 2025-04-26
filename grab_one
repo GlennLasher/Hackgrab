@@ -24,6 +24,7 @@ BASEDIR=/srv/hackgrab
 HOSTNAME=`hostname`
 AGEOUT='90'
 MAX='20'
+MAXDELAY='60'
 
 cd ${BASEDIR}/content
 
@@ -70,7 +71,7 @@ if [ "${1}" ]
 then
     :
 else
-    DELAY=$(($RANDOM % 60))
+    DELAY=$(($RANDOM % ${MAXDELAY}))
     UNTIL=`date --date="${DELAY} minutes" +"%H:%M"`
     echo "Wait ${UNTIL}  ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
     echo "Countermeasure delay of ${DELAY} minutes, until approximately ${UNTIL}."
