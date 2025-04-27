@@ -9,28 +9,26 @@ INTERVAL=1
 
 HOSTNAME=`hostname`
 LOG="${BASE}/logs/${HOSTNAME}.log"
-SHORTLOG="${BASE}/logs/${HOSTNAME}_mostrecent.log"
+SHORTLOG="${BASE}/logs/${HOSTNAME}-mostrecent.log"
 
 ARRAY=(${SERVERLIST})
 SIZE=${#ARRAY[@]}
 
-#Check if we have been outed
-OUTED=NO
-
-if [ -e ${BASE}/metadata/outed_${HOSTNAME} ]
-then
-    OUTED=YES
-fi
-
-if [ -e ${SHORTLOG} ]
-then
-   if grep "Sign in to confirm you’re not a bot." ${SHORTLOG}
-   then
-       touch ${BASE}/metadata/outed_${HOSTNAME}
-       echo "Outed" > ${BASE}/metadata/status_${HOSTNAME}
-       exit 2
-   fi
-fi
+#Check if we have been outed - On hold for now
+#if [ -e ${BASE}/metadata/outed_${HOSTNAME} ]
+#then
+#    exit 2
+#fi
+#
+#if [ -e ${SHORTLOG} ]
+#then
+#   if grep "Sign in to confirm you’re not a bot." ${SHORTLOG}
+#   then
+#       touch ${BASE}/metadata/outed_${HOSTNAME}
+#       echo "Outed" > ${BASE}/metadata/status_${HOSTNAME}
+#       exit 2
+#   fi
+#fi
 
 if echo ${SERVERLIST} | grep -qw "${HOSTNAME}"
 then
@@ -42,7 +40,7 @@ then
             exit 2
 	fi
     else
-	/srv/hackgrab/bin/grab_one "${1}" | tee ${SHORTLOG} >> ${LOG} 2>&1 &
+	/srv/hackgrab/bin/grab_one "${1}" >> ${LOG} 2>&1 &
     fi
 else
     RETRY=true
