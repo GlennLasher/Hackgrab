@@ -15,20 +15,20 @@ ARRAY=(${SERVERLIST})
 SIZE=${#ARRAY[@]}
 
 #Check if we have been outed - On hold for now
-#if [ -e ${BASE}/metadata/outed_${HOSTNAME} ]
-#then
-#    exit 2
-#fi
-#
-#if [ -e ${SHORTLOG} ]
-#then
-#   if grep "Sign in to confirm you’re not a bot." ${SHORTLOG}
-#   then
-#       touch ${BASE}/metadata/outed_${HOSTNAME}
-#       echo "Outed" > ${BASE}/metadata/status_${HOSTNAME}
-#       exit 2
-#   fi
-#fi
+if [ -e ${BASE}/metadata/outed_${HOSTNAME} ]
+then
+    exit 2
+fi
+
+if [ -e ${SHORTLOG} ]
+then
+   if grep "Sign in to confirm you’re not a bot." ${LOG}
+   then
+       touch ${BASE}/metadata/outed_${HOSTNAME}
+       echo "Outed" > ${BASE}/metadata/status_${HOSTNAME}
+       exit 2
+   fi
+fi
 
 if echo ${SERVERLIST} | grep -qw "${HOSTNAME}"
 then
