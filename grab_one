@@ -78,6 +78,7 @@ else
     sleep $(($DELAY * 60))
 fi
 
+touch url 
 
 if [ -x dothis ]
 then
