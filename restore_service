@@ -4,6 +4,10 @@ SERVERLIST='Hackgrab-a Hackgrab-b Hackgrab-c Hackgrab-d'
 BASE='/srv/hackgrab'
 ROUTER='root@makarov.lan'
 
+#Log header
+echo -n "Service restoration check launched at "
+date +"%Y-%m-%d %H:%M:%S"
+
 #0. Find out if we even need to do this.
 NEEDED=no
 for i in ${SERVERLIST}
@@ -23,12 +27,8 @@ fi
 
 
 #1. Have the router get a new prefix.
-echo "Router reset not yet implemented."
-echo "Please manually reset the router and press ENTER to continue."
-read
-
-#ssh ${ROUTER} /sbin/ifup wan6
-#sleep 60
+ssh ${ROUTER} /sbin/ifup wan6
+sleep 60
 
 #2.  Clear the log rotation log
 echo > ${BASE}/logs/rotate
