@@ -1,0 +1,52 @@
+#!/bin/bash
+
+SERVERLIST='Hackgrab-a Hackgrab-b Hackgrab-c Hackgrab-d'
+BASE='/srv/hackgrab'
+ROUTER='root@makarov.lan'
+
+#0. Find out if we even need to do this.
+NEEDED=no
+for i in ${SERVERLIST}
+do
+    if [ -e ${BASE}/metadata/outed_${i} ]
+    then
+	echo "Found flag for ${i}.  Initiating restoration."
+	NEEDED=yes
+    fi
+done
+
+if [ ${NEEDED} = 'no' ]
+then
+    echo "No service restoration is currently needed."
+    exit
+fi
+
+
+#1. Have the router get a new prefix.
+echo "Router reset not yet implemented."
+echo "Please manually reset the router and press ENTER to continue."
+read
+
+#ssh ${ROUTER} /sbin/ifup wan6
+#sleep 60
+
+#2.  Clear the log rotation log
+echo > ${BASE}/logs/rotate
+
+#For each server, we need to . . . . 
+for i in ${SERVERLIST}
+do
+    #if this was one of the servers that got flagged . . . 
+    if [ -e ${BASE}/metadata/outed_${i} ]
+    then
+	
+	#3.  Rotate the logs so that the triggering string is gone
+	/usr/bin/gzip -vf ${BASE}/logs/*log >> ${BASE}/logs/rotate 2>&1
+
+	#4.  Clear the lock
+	rm ${BASE}/metadata/outed_${i}
+
+	#5.  And update the status.
+	echo "Reset" > ${BASE}/metadata/status_${i}
+    fi
+done

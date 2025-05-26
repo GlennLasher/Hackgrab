@@ -9,7 +9,7 @@ INTERVAL=1
 
 HOSTNAME=`hostname`
 LOG="${BASE}/logs/${HOSTNAME}.log"
-SHORTLOG="${BASE}/logs/${HOSTNAME}-mostrecent.log"
+
 
 ARRAY=(${SERVERLIST})
 SIZE=${#ARRAY[@]}
@@ -20,7 +20,7 @@ then
     exit 2
 fi
 
-if [ -e ${SHORTLOG} ]
+if [ -e ${LOG} ]
 then
    if grep "Sign in to confirm you’re not a bot." ${LOG}
    then
