@@ -14,24 +14,26 @@ LOG="${BASE}/logs/${HOSTNAME}.log"
 ARRAY=(${SERVERLIST})
 SIZE=${#ARRAY[@]}
 
-#Check if we have been outed - On hold for now
+#Check if we have been outed
 if [ -e ${BASE}/metadata/outed_${HOSTNAME} ]
 then
     exit 2
 fi
 
-if [ -e ${LOG} ]
-then
-   if grep "Sign in to confirm you’re not a bot." ${LOG}
-   then
-       touch ${BASE}/metadata/outed_${HOSTNAME}
-       echo "Outed" > ${BASE}/metadata/status_${HOSTNAME}
-       exit 2
-   fi
-fi
-
+#Check to see if we're one of the worknodes.
 if echo ${SERVERLIST} | grep -qw "${HOSTNAME}"
 then
+
+    #See if anyone else has been outed.
+    if ls ${BASE}/metadata/outed_*
+    then
+	#Well, then we are, too.
+	touch ${BASE}/metadata/outed_${HOSTNAME}
+	echo "Outed" > ${BASE}/metadata/status_${HOSTNAME}
+	exit 2
+    fi
+    
+    #Check to see if we're busy.  If so, reject the job.
     if [ -e /dev/shm/Hackgrab_PID ]
     then
 	OLDPID=`cat /dev/shm/Hackgrab_PID`
@@ -40,9 +42,11 @@ then
             exit 2
 	fi
     else
+	#If we're not busy, then run the job.
 	/srv/hackgrab/bin/grab_one "${1}" >> ${LOG} 2>&1 &
     fi
 else
+    #If we're not a worknode, then pick a worknode at random and dispatch the job.
     RETRY=true
     while ${RETRY}
     do
@@ -66,5 +70,16 @@ else
 	      fi
 	  fi
     done
+fi
+
+#Check to see if we got outed just now.
+if [ -e ${LOG} ]
+then
+   if grep "Sign in to confirm you’re not a bot." ${LOG}
+   then
+       touch ${BASE}/metadata/outed_${HOSTNAME}
+       echo "Outed" > ${BASE}/metadata/status_${HOSTNAME}
+       exit 2
+   fi
 fi
 

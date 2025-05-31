@@ -41,7 +41,7 @@ do
     then
 	
 	#3.  Rotate the logs so that the triggering string is gone
-	/usr/bin/gzip -vf ${BASE}/logs/*log >> ${BASE}/logs/rotate 2>&1
+	/usr/bin/gzip -vf ${BASE}/logs/${i}.log >> ${BASE}/logs/rotate 2>&1
 
 	#4.  Clear the lock
 	rm ${BASE}/metadata/outed_${i}
