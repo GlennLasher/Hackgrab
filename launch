@@ -75,7 +75,7 @@ fi
 #Check to see if we got outed just now.
 if [ -e ${LOG} ]
 then
-   if grep "Sign in to confirm you’re not a bot." ${LOG}
+   if grep "Sign in to confirm you.re not a bot." ${LOG} > /dev/null 2>&1
    then
        touch ${BASE}/metadata/outed_${HOSTNAME}
        echo "Outed" > ${BASE}/metadata/status_${HOSTNAME}
