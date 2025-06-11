@@ -27,6 +27,8 @@ fi
 
 
 #1. Have the router get a new prefix.
+ssh ${ROUTER} /sbin/ifdown wan6
+sleep 30
 ssh ${ROUTER} /sbin/ifup wan6
 sleep 60
 
