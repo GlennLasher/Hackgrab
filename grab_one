@@ -23,7 +23,8 @@
 BASEDIR=/srv/hackgrab
 HOSTNAME=`hostname`
 AGEOUT='90'
-MAX='20'
+MAXDL='20'
+MAXLIST='100'
 MAXDELAY='60'
 
 cd ${BASEDIR}/content
@@ -95,14 +96,19 @@ fi
 
 URL="`cat url`"
 
-if [ -e .max ]
+if [ -e .maxdl ]
 then
-    MAX=`cat .max`
+    MAXDL=`cat .maxdl`
+fi
+
+if [ -e .maxlist ]
+then
+    MAXLIST=`cat .maxlist`
 fi
 
 echo "Downloading ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
     #/usr/local/bin/yt-dlp --cookies $HOME/www.youtube.com_cookies.txt --ignore-errors --write-description --download-archive archive "${URL}"
-    /usr/local/bin/yt-dlp --ignore-errors --write-description --download-archive archive --max-downloads ${MAX} "${URL}"
+    /usr/local/bin/yt-dlp --playlist-end ${MAXLIST} --ignore-errors --write-description --download-archive archive --max-downloads ${MAXDL} "${URL}"
 
 echo "Sorting     ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
 
