@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ ! ${1} ]
+then
+    echo "Usage:  ${0} <year>"
+    exit 1
+fi
+
+BASE="/srv/hackgrab"
+YEAR=${1}
+
+cd "${BASE}/content"
+
+for i in *
+do
+    if [ -e "${i}/${YEAR}" ]
+    then
+	mkdir -p "${BASE}/archive/${YEAR}/${i}"
+	mv -v "${BASE}/content/${i}/${YEAR}" "${BASE}/archive/${YEAR}/${i}/"
+    fi
+done
