@@ -4,7 +4,7 @@ import os
 import time
 import re
 
-relevantre = re.compile ("^(.*\])\.(mp4|webm|mkv|mp3|m4a)$")
+relevantre = re.compile ("^(.*\\])\\.(mp4|webm|mkv|mp3|m4a)$")
 new_filename = 'new.m3u'
 
 new_content = []

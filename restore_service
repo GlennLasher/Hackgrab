@@ -13,7 +13,9 @@ NEEDED=no
 
 for i in ${SERVERLIST}
 do
-    if grep -l "Got error: HTTP Error 403: Forbidden." ${BASE}/logs/${i}.log
+    if grep -l "Got error: HTTP Error 403: Forbidden" ${BASE}/logs/${i}.log || \
+	    grep -l "The current session has been rate-limited by YouTube for up to an hour." ${BASE}/logs/${i}.log || \
+	    grep -l "Sign in to confirm you’re not a bot." ${BASE}/logs/${i}.log
     then
 	touch ${BASE}/metadata/outed_${i}
 	echo "Outed" > ${BASE}/metadata/status_${i}
