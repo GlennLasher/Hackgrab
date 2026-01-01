@@ -3,6 +3,7 @@
 import os
 import time
 import re
+import json
 
 relevantre = re.compile ("^(.*\\])\\.(mp4|webm|mkv|mp3|m4a)$")
 new_filename = 'new.m3u'
@@ -18,14 +19,24 @@ for filename in os.listdir():
     relevantmatch = relevantre.match(filename)
     if relevantmatch:
         stub    = relevantmatch.group(1)
-        stats   = os.lstat(filename)
-        date    = time.gmtime(stats.st_mtime)
-        dateyr  = "%04d" % (date.tm_year,)
-        datemn  = "%02d" % (date.tm_mon,)
-        datedt  = "%02d" % (date.tm_mday,)
+        desc    = "%s.description" % (stub,)
+        info    = "%s.info.json" % (stub,)
+
+        if os.path.isfile(info):
+            with open(info, 'r') as infile:
+                jsdata = json.load(infile)
+            ytdate  = jsdata['upload_date']
+            dateyr  = ytdate[0:4]
+            datemn  = ytdate[4:6]
+            datedt  = ytdate[6:8]
+        else:
+            stats   = os.lstat(filename)
+            date    = time.gmtime(stats.st_mtime)
+            dateyr  = "%04d" % (date.tm_year,)
+            datemn  = "%02d" % (date.tm_mon,)
+            datedt  = "%02d" % (date.tm_mday,)
 
         target  = os.path.join(dateyr, datemn, datedt)
-        desc    = "%s.description" % (relevantmatch.group(1),)
         moveto  = os.path.join(target, filename)
 
         print ("For", filename, ":")
@@ -45,7 +56,15 @@ for filename in os.listdir():
             print ("    To", moveto)
 
             os.rename(desc, moveto)
-            
+
+        if os.path.isfile(info):
+            moveto  = os.path.join(target, info)
+
+            print ("    And move", info)
+            print ("    To", moveto)
+
+            os.rename(info, moveto)
+
         print ("", flush=True)
 
 if new_update:

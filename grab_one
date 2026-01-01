@@ -107,10 +107,8 @@ then
 fi
 
 echo "Downloading ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME} && \
-    #/usr/local/bin/yt-dlp --cookies $HOME/www.youtube.com_cookies.txt --ignore-errors --write-description --download-archive archive "${URL}"
-    #/usr/local/bin/yt-dlp -S vcodec:h264 --playlist-end ${MAXLIST} --ignore-errors --write-description --download-archive archive --max-downloads ${MAXDL} "${URL}"
-#    yt-dlp -S vcodec:h264 --playlist-end ${MAXLIST} --ignore-errors --write-description --download-archive archive --max-downloads ${MAXDL} "${URL}"
-    yt-dlp -S vcodec:h264 --remote-components ejs:github --playlist-end ${MAXLIST} --ignore-errors --write-description --download-archive archive --max-downloads ${MAXDL} "${URL}"
+    #yt-dlp -S vcodec:h264 --remote-components ejs:github --playlist-end ${MAXLIST} --ignore-errors --write-description --download-archive archive --max-downloads ${MAXDL} "${URL}"
+    yt-dlp -S vcodec:h264 --remote-components ejs:github --playlist-end ${MAXLIST} --write-info-json --ignore-errors --write-description --download-archive archive --max-downloads ${MAXDL} "${URL}"
 
 echo "Sorting     ${FOLDER}" > ${BASEDIR}/metadata/status_${HOSTNAME}
 
