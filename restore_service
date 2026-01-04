@@ -45,13 +45,19 @@ then
 fi
 
 
-#1. Have the router get a new prefix.
+#1. Stop whatever we're doing.
+for i in ${SERVERLIST}
+do
+    ssh ${i} pkill yt-dlp
+done
+
+#2. Have the router get a new prefix.
 ssh ${ROUTER} /sbin/ifdown wan6
 sleep 30
 ssh ${ROUTER} /sbin/ifup wan6
 sleep 60
 
-#2.  Clear the log rotation log
+#3.  Clear the log rotation log
 echo > ${BASE}/logs/rotate
 
 #For each server, we need to . . . . 
@@ -61,13 +67,13 @@ do
     if [ -e ${BASE}/metadata/outed_${i} ]
     then
 	
-	#3.  Rotate the logs so that the triggering string is gone
+	#4.  Rotate the logs so that the triggering string is gone
 	/usr/bin/gzip -vf ${BASE}/logs/${i}.log >> ${BASE}/logs/rotate 2>&1
 
-	#4.  Clear the lock
+	#5.  Clear the lock
 	rm ${BASE}/metadata/outed_${i}
 
-	#5.  And update the status.
+	#6.  And update the status.
 	echo "Reset" > ${BASE}/metadata/status_${i}
     fi
 done
