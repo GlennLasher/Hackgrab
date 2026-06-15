@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BASE="/srv/hackgrab"
+ARCH="/srv/hackarch"
+
+cd "${BASE}"
+
+tar -cf - archive | (cd ${ARCH} && tar -xvf -) && rm -rf archive && mkdir archive
