@@ -69,4 +69,4 @@ for filename in os.listdir():
 
 if new_update:
     with open(new_filename, "w") as outfile:
-        outfile.write("\n".join(new_content[-10:]) + '\n')
+        outfile.write("\n".join(sorted(new_content)[-10:]) + '\n')
